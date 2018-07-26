@@ -1,0 +1,36 @@
+#!/bin/bash
+# Compacts then exports a VirtualBox VM
+#
+# Usage: vbox-export <vm-name> <ssh-host-name>
+# Note: expects key-based auth for ssh to be set up
+
+if [ -z "$1" ]; then
+    printf "VM name not given!\n"
+    exit 1
+fi
+
+if [ -z "$2" ]; then
+    printf "SSH host name not given!\n"
+    exit 1
+fi
+
+if VBoxManage showvminfo "${1}" --machinereadable | grep -q "VMState=\"poweroff\""; then
+    printf "# Starting VM...\n"
+    VBoxManage startvm "${1}"
+fi
+
+printf "\n# Writing big empty file...\n"
+ssh ${2} "dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k"
+ssh ${2} "rm -v /var/tmp/bigemptyfile"
+
+printf "\n# Stopping VM...\n"
+VBoxManage controlvm "${1}" poweroff
+
+printf "\n# Compacting VM...\n"
+VBoxManage modifymedium --compact "${HOME}/VirtualBox VMs/${1}/${1}.vdi"
+
+printf "\n# Exporting VM...\n"
+VBoxManage export "${1}" -o "${HOME}/Desktop/${1}.ova"
+
+printf "\n# Done\n"
+du -sh "${HOME}/Desktop/${1}.ova"

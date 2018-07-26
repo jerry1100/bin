@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Run the entered command every second, indefinitely
+
+while true; do
+    output="$($@ 2>&1)" # redirect stderr to stdout
+    title="[$(date +"%b %d %Y %r")]: $@"
+    clear
+    printf "${title}\n\n${output}\n"
+    sleep 1
+done

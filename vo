@@ -1,0 +1,5 @@
+#!/bin/bash
+#
+# Saves the output of the command as a file and opens it in vim
+
+vim <($@)
