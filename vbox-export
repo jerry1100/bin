@@ -1,16 +1,17 @@
 #!/bin/bash
 # Compacts then exports a VirtualBox VM
 #
-# Usage: vbox-export <vm-name> <ssh-host-name>
-# Note: expects key-based auth for ssh to be set up
+# Usage: vbox-export <vm name> <ssh info>
+# Example: vbox-export "my-vm" "-p 2222 user@host"
+# Or with SSH config: vbox-export "my-vm" "myhost"
 
 if [ -z "$1" ]; then
-    printf "VM name not given!\n"
+    printf "Missing VM name.\n"
     exit 1
 fi
 
 if [ -z "$2" ]; then
-    printf "SSH host name not given!\n"
+    printf "Missing SSH info.\n"
     exit 1
 fi
 
@@ -20,8 +21,8 @@ if ! VBoxManage showvminfo "$1" --machinereadable | grep -q 'VMState="running"';
 fi
 
 printf "\n# Writing big empty file...\n"
-ssh -t "$2" "sudo dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k"
-ssh -t "$2" "sudo rm -v /var/tmp/bigemptyfile"
+eval "ssh -t $2 sudo dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k"
+eval "ssh -t $2 sudo rm -v /var/tmp/bigemptyfile"
 
 printf "\n# Stopping VM...\n"
 VBoxManage controlvm "$1" acpipowerbutton
