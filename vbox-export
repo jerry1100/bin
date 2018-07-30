@@ -14,17 +14,23 @@ if [ -z "$2" ]; then
     exit 1
 fi
 
-if VBoxManage showvminfo "${1}" --machinereadable | grep -q "VMState=\"poweroff\""; then
+if ! VBoxManage showvminfo "${1}" --machinereadable | grep -q 'VMState="running"'; then
     printf "# Starting VM...\n"
     VBoxManage startvm "${1}"
 fi
 
 printf "\n# Writing big empty file...\n"
-ssh ${2} "dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k"
-ssh ${2} "rm -v /var/tmp/bigemptyfile"
+ssh -t ${2} "sudo dd if=/dev/zero of=/var/tmp/bigemptyfile bs=4096k"
+ssh -t ${2} "sudo rm -v /var/tmp/bigemptyfile"
 
 printf "\n# Stopping VM...\n"
-VBoxManage controlvm "${1}" poweroff
+VBoxManage controlvm "${1}" acpipowerbutton
+
+printf "Waiting for VM \"${1}\" to shutdown...\n"
+while ! VBoxManage showvminfo "${1}" --machinereadable | grep -q 'VMState="poweroff"'; do
+    sleep 1
+done
+printf "VM \"${1}\" has been successfully shutdown.\n"
 
 printf "\n# Compacting VM...\n"
 VBoxManage modifymedium --compact "${HOME}/VirtualBox VMs/${1}/${1}.vdi"
