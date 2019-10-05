@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # Bounces the terminal icon in the launcher and says a phrase. Add this to the
 # end of a long command to be notified when it finishes.
