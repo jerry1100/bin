@@ -1,0 +1,24 @@
+#!/bin/bash
+#
+# Copies all the files ending with ext "$1" in media/ to files/$ext
+
+ext="$1"
+
+if [ -z "$ext" ]; then
+    echo "Missing extension, exiting..."
+
+    exit 1
+fi
+
+target_dir="files/$ext"
+media_list="$target_dir/media.txt"
+
+if [ ! -f "$media_list" ]; then
+    echo "$media_list does not exist, create it first..."
+
+    exit 1
+fi
+
+cat "$media_list" | while read file; do
+    rsync --relative "$file" "$target_dir"
+done

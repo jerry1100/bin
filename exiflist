@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Recursively lists exifdata
+
+exiftool \
+    -csv \
+    -recurse \
+    -quiet \
+    -createDate \
+    -dateTimeOriginal \
+    --ext json \
+    --ext txt \
+    --ext csv \
+    .

@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# Prints the number of files for each extension
+
+for ext in jpeg jpg mp4 mov heic gif png 3gp 3gpp; do
+    count=`find "files/$ext/media" -iname "*.$ext" | wc -l`
+    echo "[$ext] $count"
+done

@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# Recursively updates supported file types' create date with data stored in
+# {fileName}.json
+
+# Setting "DateTimeOriginal" seems to mess up the year in Photos (for mp4 at least)
+
+ext="$1"
+
+if [ -z "$ext" ]; then
+    echo "Missing extension, exiting..."
+
+    exit 1
+fi
+
+exiftool \
+    -recurse \
+    -tagsFromFile "%d/%F.json" \
+    -dateFormat %s \
+    "-CreateDate<PhotoTakenTimeTimestamp" \
+    "-DateTimeOriginal<PhotoTakenTimeTimestamp" \
+    -ext "$ext" \
+    -overwrite_original \
+    .

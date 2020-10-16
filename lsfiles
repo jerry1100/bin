@@ -1,0 +1,19 @@
+#!/bin/sh
+#
+# Gets a list of files' absolute urls in media/ with extension "$1"
+
+ext="$1"
+
+if [ -z "$ext" ]; then
+    echo "Missing extension, exiting..."
+
+    exit 1
+fi
+
+target_dir="files/$ext"
+media_dir="media"
+
+mkdir -pv "$target_dir"
+
+find "$media_dir" -type f -iname "*.$ext" > "$target_dir/media.txt"
+find "$media_dir" -type f -iname "*.$ext.json" > "$target_dir/json.txt"
