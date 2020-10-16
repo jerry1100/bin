@@ -20,4 +20,5 @@ exiftool \
     "-CreateDate<PhotoTakenTimeTimestamp" \
     -ext "$ext" \
     -overwrite_original \
+    -progress \
     .
