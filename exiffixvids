@@ -1,0 +1,2 @@
+#!/bin/sh
+exiftool "-quicktime:createdate<filename" "-quicktime:modifydate<filename" -api quicktimeutc -overwrite_original .

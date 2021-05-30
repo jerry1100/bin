@@ -17,9 +17,7 @@ exiftool \
     -recurse \
     -tagsFromFile "%d/%F.json" \
     -dateFormat %s \
-    "-CreateDate<PhotoTakenTimeTimestamp" \
-    "-DateTimeOriginal<PhotoTakenTimeTimestamp" \
+    "-QuickTime:CreateDate<PhotoTakenTimeTimestamp" \
     -ext "$ext" \
     -overwrite_original \
-    -progress \
     .

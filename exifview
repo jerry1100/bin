@@ -1,0 +1,11 @@
+#!/bin/sh
+
+file="$1"
+
+if [ -z "$file" ]; then
+    echo "Missing file, exiting..."
+
+    exit 1
+fi
+
+exiftool -a -G1 -s -time:all "$file"

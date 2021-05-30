@@ -1,0 +1,62 @@
+#!/bin/sh
+
+type="$1"
+file="$2"
+time="$3"
+timeOffset="$4"
+
+if [ -z "$type" ]; then
+    echo "Missing type, exiting..."
+
+    exit 1
+fi
+
+if [ -z "$file" ]; then
+    echo "Missing file, exiting..."
+
+    exit 1
+fi
+
+if [ -z "$time" ]; then
+    echo "Missing time, exiting..."
+
+    exit 1
+fi
+
+if [ "$type" = "pic" ]; then
+    if [ -z "$timeOffset" ]; then
+        exiftool \
+            -IDF0:ModifyDate="$time" \
+            -ExifIFD:DateTimeOriginal="$time" \
+            -ExifIFD:CreateDate="$time" \
+            -overwrite_original \
+            "$file"
+    else
+        exiftool \
+            -IDF0:ModifyDate="$time" \
+            -ExifIFD:DateTimeOriginal="$time" \
+            -ExifIFD:CreateDate="$time" \
+            -ExifIFD:OffsetTime="$timeOffset" \
+            -ExifIFD:OffsetTimeOriginal="$timeOffset" \
+            -ExifIFD:OffsetTimeDigitized="$timeOffset" \
+            -overwrite_original \
+            "$file"
+    fi
+fi
+
+if [ "$type" = "vid" ]; then
+    if [ -z "$timeOffset" ]; then
+        exiftool \
+            -QuickTime:CreateDate="$time" \
+            -QuickTime:ModifyDate="$time" \
+            -overwrite_original \
+            "$file"
+    else
+        exiftool \
+            -QuickTime:CreateDate="$time" \
+            -QuickTime:ModifyDate="$time" \
+            -Keys:CreationDate="$time""$timeOffset" \
+            -overwrite_original \
+            "$file"
+    fi
+fi

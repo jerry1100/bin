@@ -3,12 +3,15 @@
 # Recursively lists exifdata
 #-csv \
 
+echo "CreateDate\t\tDateCreated\tFileName"
+
 exiftool \
     -T \
+    -api MissingTagValue=".                 ."\
     -recurse \
     -quiet \
-    -quicktime:createdate \
-    -quicktime:modifydate \
+    -xmp:createDate \
+    -xmp:datecreated \
     -fileName \
     --ext json \
     --ext txt \

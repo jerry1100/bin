@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Returns a unique count of filenames in a directory
+
+find * -type f -print0 | xargs -0 basename | sort | uniq | wc -l
