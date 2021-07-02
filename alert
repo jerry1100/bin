@@ -4,4 +4,4 @@
 # end of a long command to be notified when it finishes.
 
 tput bel
-say "Command finished"
+say "Command finished" &
